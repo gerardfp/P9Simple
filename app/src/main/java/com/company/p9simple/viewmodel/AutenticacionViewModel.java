@@ -40,7 +40,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
         estadoDelRegistro.setValue(EstadoDelRegistro.INICIO_DEL_REGISTRO);
     }
 
-    public void crearCuentaYLogear(final String nombre, final String contrasenya, final String biografia) {
+    public void crearCuentaYEntrar(final String nombre, final String contrasenya, final String biografia) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -53,6 +53,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
                             appDao.insertarUsuario(newUsuario);
                             usuarioRegistrado = newUsuario;
                             estadoDelRegistro.postValue(EstadoDelRegistro.REGISTRO_COMPLETADO);
+                            entrar(nombre, contrasenya);
                         }
                     });
                 } else {

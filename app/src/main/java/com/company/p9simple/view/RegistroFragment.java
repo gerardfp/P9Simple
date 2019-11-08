@@ -48,7 +48,7 @@ public class RegistroFragment extends Fragment {
         view.findViewById(R.id.botonRegistrar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                autenticacionViewModel.crearCuentaYLogear(nombreCampoTexto.getText().toString(), contrasenyaCampoTexto.getText().toString(), biografiaCampoTexto.getText().toString());
+                autenticacionViewModel.crearCuentaYEntrar(nombreCampoTexto.getText().toString(), contrasenyaCampoTexto.getText().toString(), biografiaCampoTexto.getText().toString());
             }
         });
 
@@ -57,24 +57,22 @@ public class RegistroFragment extends Fragment {
             public void onChanged(EstadoDelRegistro estadoDelRegistro) {
                 switch (estadoDelRegistro){
                     case REGISTRO_COMPLETADO:
-
                         autenticacionViewModel.estadoDelRegistro.setValue(EstadoDelRegistro.INICIO_DEL_REGISTRO);
-
-                        autenticacionViewModel.entrar(autenticacionViewModel.usuarioRegistrado.nombre, autenticacionViewModel.usuarioRegistrado.contrasenya)
-                                .observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
-                                    @Override
-                                    public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                                        switch (estadoDeLaAutenticacion){
-                                            case AUTENTICADO:
-                                                Navigation.findNavController(view).navigate(R.id.perfilFragment);
-                                                break;
-                                        }
-                                    }
-                                });
                         break;
 
                     case NOMBRE_NO_DISPONIBLE:
                         Toast.makeText(getContext(), "NOMBRE DE USUARIO NO DISPONIBLE", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
+            @Override
+            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                switch (estadoDeLaAutenticacion){
+                    case AUTENTICADO:
+                        Navigation.findNavController(view).navigate(R.id.perfilFragment);
                         break;
                 }
             }
