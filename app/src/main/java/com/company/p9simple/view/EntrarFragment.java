@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.company.p9simple.R;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
 
+import static com.company.p9simple.viewmodel.AutenticacionViewModel.*;
+
 
 public class EntrarFragment extends Fragment {
 
@@ -52,13 +54,16 @@ public class EntrarFragment extends Fragment {
             @Override
             public void onClick(final View view) {
                 autenticacionViewModel.entrar(usuarioCampoTexto.getText().toString(), contrasenyaCampoTexto.getText().toString())
-                        .observe(getViewLifecycleOwner(), new Observer<AutenticacionViewModel.EstadoDeLaAutenticacion>() {
-                    @Override
-                    public void onChanged(AutenticacionViewModel.EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                                if(estadoDeLaAutenticacion == AutenticacionViewModel.EstadoDeLaAutenticacion.AUTENTICADO){
-                                    Navigation.findNavController(view).navigate(R.id.perfilFragment);
-                                } else if(estadoDeLaAutenticacion == AutenticacionViewModel.EstadoDeLaAutenticacion.AUTENTICACION_INVALIDA){
-                                    Toast.makeText(getContext(), "CREDENCIALES NO VALIDAS", Toast.LENGTH_SHORT).show();
+                        .observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
+                            @Override
+                            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                                switch (estadoDeLaAutenticacion){
+                                    case AUTENTICADO:
+                                        Navigation.findNavController(view).navigate(R.id.perfilFragment);
+                                        break;
+                                    case AUTENTICACION_INVALIDA:
+                                        Toast.makeText(getContext(), "CREDENCIALES NO VALIDAS", Toast.LENGTH_SHORT).show();
+                                        break;
                                 }
                             }
                         });

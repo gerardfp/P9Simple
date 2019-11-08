@@ -18,6 +18,8 @@ import android.widget.Button;
 import com.company.p9simple.R;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
 
+import static com.company.p9simple.viewmodel.AutenticacionViewModel.*;
+
 
 public class InicioFragment extends Fragment {
 
@@ -48,13 +50,16 @@ public class InicioFragment extends Fragment {
             }
         });
 
-        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<AutenticacionViewModel.EstadoDeLaAutenticacion>() {
+        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
             @Override
-            public void onChanged(AutenticacionViewModel.EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                if(estadoDeLaAutenticacion == AutenticacionViewModel.EstadoDeLaAutenticacion.AUTENTICADO){
-                    botonSalir.setVisibility(View.VISIBLE);
-                } else {
-                    botonSalir.setVisibility(View.GONE);
+            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                switch (estadoDeLaAutenticacion){
+                    case AUTENTICADO:
+                        botonSalir.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        botonSalir.setVisibility(View.GONE);
+                        break;
                 }
             }
         });

@@ -55,22 +55,27 @@ public class RegistroFragment extends Fragment {
         autenticacionViewModel.estadoDelRegistro.observe(getViewLifecycleOwner(), new Observer<EstadoDelRegistro>() {
             @Override
             public void onChanged(EstadoDelRegistro estadoDelRegistro) {
-                if(estadoDelRegistro == EstadoDelRegistro.REGISTRO_COMPLETADO){
+                switch (estadoDelRegistro){
+                    case REGISTRO_COMPLETADO:
 
-                    autenticacionViewModel.estadoDelRegistro.setValue(EstadoDelRegistro.INICIO_DEL_REGISTRO);
+                        autenticacionViewModel.estadoDelRegistro.setValue(EstadoDelRegistro.INICIO_DEL_REGISTRO);
 
-                    autenticacionViewModel.entrar(autenticacionViewModel.usuarioRegistrado.nombre, autenticacionViewModel.usuarioRegistrado.contrasenya)
-                            .observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
-                                @Override
-                                public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                                    if(estadoDeLaAutenticacion == EstadoDeLaAutenticacion.AUTENTICADO){
-                                        Navigation.findNavController(view).navigate(R.id.perfilFragment);
+                        autenticacionViewModel.entrar(autenticacionViewModel.usuarioRegistrado.nombre, autenticacionViewModel.usuarioRegistrado.contrasenya)
+                                .observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
+                                    @Override
+                                    public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                                        switch (estadoDeLaAutenticacion){
+                                            case AUTENTICADO:
+                                                Navigation.findNavController(view).navigate(R.id.perfilFragment);
+                                                break;
+                                        }
                                     }
-                                }
-                            });
+                                });
+                        break;
 
-                } else if(estadoDelRegistro == EstadoDelRegistro.NOMBRE_NO_DISPONIBLE){
-                    Toast.makeText(getContext(), "NOMBRE DE USUARIO NO DISPONIBLE", Toast.LENGTH_SHORT).show();
+                    case NOMBRE_NO_DISPONIBLE:
+                        Toast.makeText(getContext(), "NOMBRE DE USUARIO NO DISPONIBLE", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         });
