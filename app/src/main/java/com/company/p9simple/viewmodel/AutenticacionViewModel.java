@@ -43,41 +43,38 @@ public class AutenticacionViewModel extends AndroidViewModel {
     }
 
     public void crearCuentaYLogear(final String nombre, final String contrasenya, final String biografia) {
-        final LiveData<Usuario> userNameCheck = appDao.comprobarNombreDiponible(nombre);
-        userNameCheck.observeForever(new Observer<Usuario>() {
+        AsyncTask.execute(new Runnable() {
             @Override
-            public void onChanged(Usuario usuario) {
+            public void run() {
+                Usuario usuario = appDao.comprobarNombreDiponible(nombre);
                 if(usuario == null){
-                    final Usuario newUsuario = new Usuario(nombre, contrasenya, biografia);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
+                            Usuario newUsuario = new Usuario(nombre, contrasenya, biografia);
                             appDao.insertarUsuario(newUsuario);
                             usuarioRegistrado = newUsuario;
                             estadoDelRegistro.postValue(EstadoDelRegistro.REGISTRO_COMPLETADO);
                         }
                     });
                 } else {
-                    estadoDelRegistro.setValue(EstadoDelRegistro.NOMBRE_NO_DISPONIBLE);
+                    estadoDelRegistro.postValue(EstadoDelRegistro.NOMBRE_NO_DISPONIBLE);
                 }
-                userNameCheck.removeObserver(this);
             }
         });
     }
 
-    public MutableLiveData<EstadoDeLaAutenticacion> entrar(String nombre, String contrasenya) {
-        final LiveData<Usuario> authenticate = appDao.autenticar(nombre, contrasenya);
-
-        authenticate.observeForever(new Observer<Usuario>() {
+    public MutableLiveData<EstadoDeLaAutenticacion> entrar(final String nombre, final String contrasenya) {
+        AsyncTask.execute(new Runnable() {
             @Override
-            public void onChanged(Usuario usuario) {
+            public void run() {
+                Usuario usuario = appDao.autenticar(nombre, contrasenya);
                 if(usuario != null){
                     usuarioLogeado = usuario;
-                    estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.AUTENTICADO);
+                    estadoDeLaAutenticacion.postValue(EstadoDeLaAutenticacion.AUTENTICADO);
                 } else {
-                    estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.AUTENTICACION_INVALIDA);
+                    estadoDeLaAutenticacion.postValue(EstadoDeLaAutenticacion.AUTENTICACION_INVALIDA);
                 }
-                authenticate.removeObserver(this);
             }
         });
 
