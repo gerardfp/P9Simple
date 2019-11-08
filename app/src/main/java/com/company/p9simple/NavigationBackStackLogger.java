@@ -10,11 +10,11 @@ import androidx.navigation.Navigation;
 
 public class NavigationBackStackLogger {
     public static void log(View view){
-        Log.e("NBS", " ");
-        Log.e("NBS", "------" + LocalDateTime.now());
-        Bundle b = Navigation.findNavController(view).saveState();
-        for(int is : b.getIntArray("android-support-nav:controller:backStackIds")){
-            Log.e("NBS", "> " +view.getContext().getResources().getResourceEntryName(is));
-        }
+//        Log.e("NBS", " ");
+//        Log.e("NBS", "------" + LocalDateTime.now());
+//        Bundle b = Navigation.findNavController(view).saveState();
+//        for(int is : b.getIntArray("android-support-nav:controller:backStackIds")){
+//            Log.e("NBS", "> " +view.getContext().getResources().getResourceEntryName(is));
+//        }
     }
 }
