@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.company.p9simple.NavigationBackStackLogger;
 import com.company.p9simple.R;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
 
@@ -23,9 +24,9 @@ import static com.company.p9simple.viewmodel.AutenticacionViewModel.*;
 
 public class InicioFragment extends Fragment {
 
-    AutenticacionViewModel autenticacionViewModel;
+    private AutenticacionViewModel autenticacionViewModel;
 
-    Button botonSalir;
+    private Button cerrarSesionButton, irAlPerfilButton;
 
     public InicioFragment() {}
 
@@ -37,16 +38,25 @@ public class InicioFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NavigationBackStackLogger.log(view);
 
         autenticacionViewModel = ViewModelProviders.of(requireActivity()).get(AutenticacionViewModel.class);
 
-        botonSalir = view.findViewById(R.id.logout_button);
+        cerrarSesionButton = view.findViewById(R.id.button_cerrarSesion);
+        irAlPerfilButton = view.findViewById(R.id.button_irAlPerfil);
 
 
-        view.findViewById(R.id.goto_profile_button).setOnClickListener(new View.OnClickListener() {
+        irAlPerfilButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.perfilFragment);
+            }
+        });
+
+        cerrarSesionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                autenticacionViewModel.salir();
             }
         });
 
@@ -55,19 +65,13 @@ public class InicioFragment extends Fragment {
             public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
                 switch (estadoDeLaAutenticacion){
                     case AUTENTICADO:
-                        botonSalir.setVisibility(View.VISIBLE);
+                        cerrarSesionButton.setVisibility(View.VISIBLE);
                         break;
+
                     default:
-                        botonSalir.setVisibility(View.GONE);
+                        cerrarSesionButton.setVisibility(View.GONE);
                         break;
                 }
-            }
-        });
-
-        botonSalir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                autenticacionViewModel.salir();
             }
         });
     }

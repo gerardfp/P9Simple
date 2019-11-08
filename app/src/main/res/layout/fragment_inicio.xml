@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/goto_profile_button"
+            android:id="@+id/button_irAlPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="VIEW MY PROFILE"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/logout_button"
+            android:id="@+id/button_cerrarSesion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LOGOUT"

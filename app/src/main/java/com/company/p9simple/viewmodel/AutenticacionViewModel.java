@@ -40,7 +40,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
         estadoDelRegistro.setValue(EstadoDelRegistro.INICIO_DEL_REGISTRO);
     }
 
-    public void crearCuentaYEntrar(final String nombre, final String contrasenya, final String biografia) {
+    public void crearCuentaEIniciarSesion(final String nombre, final String contrasenya, final String biografia) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -53,7 +53,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
                             appDao.insertarUsuario(newUsuario);
                             usuarioRegistrado = newUsuario;
                             estadoDelRegistro.postValue(EstadoDelRegistro.REGISTRO_COMPLETADO);
-                            entrar(nombre, contrasenya);
+                            iniciarSesion(nombre, contrasenya);
                         }
                     });
                 } else {
@@ -63,7 +63,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
         });
     }
 
-    public MutableLiveData<EstadoDeLaAutenticacion> entrar(final String nombre, final String contrasenya) {
+    public void iniciarSesion(final String nombre, final String contrasenya) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -76,14 +76,10 @@ public class AutenticacionViewModel extends AndroidViewModel {
                 }
             }
         });
-
-        return estadoDeLaAutenticacion;
     }
 
-    public MutableLiveData<EstadoDeLaAutenticacion> salir() {
+    public void salir() {
         usuarioLogeado = null;
         estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.NO_AUTENTICADO);
-
-        return estadoDeLaAutenticacion;
     }
 }

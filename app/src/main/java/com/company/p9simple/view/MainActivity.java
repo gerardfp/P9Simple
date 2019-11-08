@@ -5,6 +5,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
+import com.company.p9simple.NavigationBackStackLogger;
 import com.company.p9simple.R;
 
 public class MainActivity extends AppCompatActivity {

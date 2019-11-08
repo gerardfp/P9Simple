@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.company.p9simple.NavigationBackStackLogger;
 import com.company.p9simple.R;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
 import com.company.p9simple.viewmodel.AutenticacionViewModel.EstadoDeLaAutenticacion;
@@ -23,10 +25,10 @@ import androidx.navigation.Navigation;
 
 public class RegistroFragment extends Fragment {
 
-    AutenticacionViewModel autenticacionViewModel;
+    private AutenticacionViewModel autenticacionViewModel;
 
-    EditText nombreCampoTexto, contrasenyaCampoTexto, biografiaCampoTexto;
-
+    private EditText nombreEditText, contrasenyaEditText, biografiaEditText;
+    private Button registrarButton;
 
     public RegistroFragment() { }
 
@@ -38,17 +40,20 @@ public class RegistroFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NavigationBackStackLogger.log(view);
 
         autenticacionViewModel = ViewModelProviders.of(requireActivity()).get(AutenticacionViewModel.class);
 
-        nombreCampoTexto = view.findViewById(R.id.nombre);
-        contrasenyaCampoTexto = view.findViewById(R.id.contrasenya);
-        biografiaCampoTexto = view.findViewById(R.id.biografia);
+        nombreEditText = view.findViewById(R.id.edittext_nombre);
+        contrasenyaEditText = view.findViewById(R.id.edittext_contrasenya);
+        biografiaEditText = view.findViewById(R.id.edittext_biografia);
+        registrarButton = view.findViewById(R.id.button_registrar);
 
-        view.findViewById(R.id.botonRegistrar).setOnClickListener(new View.OnClickListener() {
+
+        registrarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                autenticacionViewModel.crearCuentaYEntrar(nombreCampoTexto.getText().toString(), contrasenyaCampoTexto.getText().toString(), biografiaCampoTexto.getText().toString());
+                autenticacionViewModel.crearCuentaEIniciarSesion(nombreEditText.getText().toString(), contrasenyaEditText.getText().toString(), biografiaEditText.getText().toString());
             }
         });
 
@@ -72,7 +77,7 @@ public class RegistroFragment extends Fragment {
             public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
                 switch (estadoDeLaAutenticacion){
                     case AUTENTICADO:
-                        Navigation.findNavController(view).navigate(R.id.perfilFragment);
+                        Navigation.findNavController(view).popBackStack();
                         break;
                 }
             }

@@ -16,22 +16,22 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/nombre"
+            android:id="@+id/edittext_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"/>
         <EditText
-            android:id="@+id/contrasenya"
+            android:id="@+id/edittext_contrasenya"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"/>
         <EditText
-            android:id="@+id/biografia"
+            android:id="@+id/edittext_biografia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Bio"/>
         <Button
-            android:id="@+id/botonRegistrar"
+            android:id="@+id/button_registrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="REGISTRAR"/>

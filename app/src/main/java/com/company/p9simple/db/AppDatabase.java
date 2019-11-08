@@ -10,15 +10,17 @@ import androidx.room.RoomDatabase;
 
 @Database(entities = {Usuario.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
-    private static AppDatabase INSTANCE;
 
     public abstract AppDao dao();
+    private static AppDatabase INSTANCE;
 
     public static AppDatabase getInstance(final Context context){
         if(INSTANCE == null){
-            INSTANCE = Room.databaseBuilder(context, AppDatabase.class, "app-db")
-                    .fallbackToDestructiveMigration()
-                    .build();
+            synchronized (AppDatabase.class) {
+                INSTANCE = Room.databaseBuilder(context, AppDatabase.class, "app-db")
+                        .fallbackToDestructiveMigration()
+                        .build();
+            }
         }
         return INSTANCE;
     }

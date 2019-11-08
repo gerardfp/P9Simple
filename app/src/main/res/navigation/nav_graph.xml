@@ -18,12 +18,16 @@
         android:id="@+id/perfilFragment"
         android:name="com.company.p9simple.view.PerfilFragment"
         android:label="fragment_perfil"
-        tools:layout="@layout/fragment_perfil" />
+        tools:layout="@layout/fragment_perfil" >
+        <action
+            android:id="@+id/action_perfilFragment_to_entrarFragment"
+            app:destination="@id/iniciarSesionFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/entrarFragment"
-        android:name="com.company.p9simple.view.EntrarFragment"
+        android:id="@+id/iniciarSesionFragment"
+        android:name="com.company.p9simple.view.IniciarSesionFragment"
         android:label="fragment_entrar"
-        tools:layout="@layout/fragment_entrar" >
+        tools:layout="@layout/fragment_iniciar_sesion" >
         <action
             android:id="@+id/action_entrarFragment_to_registrarFragment4"
             app:destination="@id/registroFragment" />

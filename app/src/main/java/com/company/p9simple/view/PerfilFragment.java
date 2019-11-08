@@ -3,7 +3,6 @@ package com.company.p9simple.view;
 
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.company.p9simple.NavigationBackStackLogger;
 import com.company.p9simple.R;
 import com.company.p9simple.model.Usuario;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
@@ -23,9 +23,9 @@ import com.company.p9simple.viewmodel.AutenticacionViewModel;
 
 public class PerfilFragment extends Fragment {
 
-    TextView nombreCampoTexto, biografiaCampoTexto;
-
     private AutenticacionViewModel autenticacionViewModel;
+
+    private TextView nombreEditText, biografiaEditText;
 
     public PerfilFragment() { }
 
@@ -37,11 +37,13 @@ public class PerfilFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NavigationBackStackLogger.log(view);
 
         autenticacionViewModel = ViewModelProviders.of(requireActivity()).get(AutenticacionViewModel.class);
 
-        nombreCampoTexto = view.findViewById(R.id.nombre);
-        biografiaCampoTexto = view.findViewById(R.id.biografia);
+        nombreEditText = view.findViewById(R.id.edittext_nombre);
+        biografiaEditText = view.findViewById(R.id.edittext_biografia);
+
 
         autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<AutenticacionViewModel.EstadoDeLaAutenticacion>() {
             @Override
@@ -50,25 +52,17 @@ public class PerfilFragment extends Fragment {
                     case AUTENTICADO:
                         mostrarPerfil(autenticacionViewModel.usuarioLogeado);
                         break;
+
                     case NO_AUTENTICADO:
-                        Navigation.findNavController(view).navigate(R.id.entrarFragment);
+                        Navigation.findNavController(view).navigate(R.id.iniciarSesionFragment);
                         break;
                 }
             }
         });
-
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
-                new OnBackPressedCallback(true) {
-                    @Override
-                    public void handleOnBackPressed() {
-                        Navigation.findNavController(view).popBackStack(R.id.inicioFragment, false);
-                    }
-                });
-
     }
 
     private void mostrarPerfil(Usuario usuario) {
-        nombreCampoTexto.setText(usuario.nombre);
-        biografiaCampoTexto.setText(usuario.biografia);
+        nombreEditText.setText(usuario.nombre);
+        biografiaEditText.setText(usuario.biografia);
     }
 }
