@@ -56,7 +56,7 @@ public class InicioFragment extends Fragment {
         cerrarSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                autenticacionViewModel.salir();
+                autenticacionViewModel.cerrarSesion();
             }
         });
 
