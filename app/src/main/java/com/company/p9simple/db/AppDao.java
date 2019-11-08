@@ -16,5 +16,5 @@ public abstract class AppDao {
     public abstract LiveData<Usuario> autenticar(String nombre, String contrasenya);
 
     @Query("SELECT * FROM Usuario WHERE nombre = :nombre")
-    public abstract LiveData<Usuario> comprobarNombreDisponible(String nombre);
+    public abstract Usuario comprobarNombreDisponible(String nombre);
 }

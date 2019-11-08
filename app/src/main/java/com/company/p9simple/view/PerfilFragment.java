@@ -20,6 +20,7 @@ import com.company.p9simple.R;
 import com.company.p9simple.model.Usuario;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
 
+import static com.company.p9simple.viewmodel.AutenticacionViewModel.*;
 
 public class PerfilFragment extends Fragment {
 
@@ -45,12 +46,12 @@ public class PerfilFragment extends Fragment {
         biografiaEditText = view.findViewById(R.id.edittext_biografia);
 
 
-        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<AutenticacionViewModel.EstadoDeLaAutenticacion>() {
+        autenticacionViewModel.autenticacion.observe(getViewLifecycleOwner(), new Observer<Autenticacion>() {
             @Override
-            public void onChanged(AutenticacionViewModel.EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                switch (estadoDeLaAutenticacion) {
+            public void onChanged(Autenticacion autenticacion) {
+                switch (autenticacion.estado) {
                     case AUTENTICADO:
-                        mostrarPerfil(autenticacionViewModel.usuarioLogeado);
+                        mostrarPerfil(autenticacion.usuario);
                         break;
 
                     case NO_AUTENTICADO:

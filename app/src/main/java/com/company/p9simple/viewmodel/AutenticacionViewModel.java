@@ -2,7 +2,6 @@ package com.company.p9simple.viewmodel;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.company.p9simple.db.AppDao;
 import com.company.p9simple.db.AppDatabase;
@@ -17,10 +16,27 @@ import androidx.lifecycle.Transformations;
 
 public class AutenticacionViewModel extends AndroidViewModel {
 
-    public enum EstadoDeLaAutenticacion {
-        NO_AUTENTICADO,
-        AUTENTICADO,
-        AUTENTICACION_INVALIDA
+    public static class Autenticacion {
+        public enum Estado {
+            NO_AUTENTICADO,
+            AUTENTICADO,
+            AUTENTICACION_INVALIDA
+        }
+        public Estado estado;
+        public Usuario usuario;
+
+        Autenticacion(Estado estado) {
+            this.estado = estado;
+        }
+
+        Autenticacion(Usuario usuario) {
+            this.usuario = usuario;
+        }
+
+        Autenticacion(Estado estado, Usuario usuario) {
+            this.estado = estado;
+            this.usuario = usuario;
+        }
     }
 
     public enum EstadoDelRegistro {
@@ -31,80 +47,65 @@ public class AutenticacionViewModel extends AndroidViewModel {
 
     private AppDao appDao;
 
-    public MutableLiveData<EstadoDeLaAutenticacion> estadoDeLaAutenticacion = new MutableLiveData<>();
-    public MutableLiveData<EstadoDelRegistro> estadoDelRegistro = new MutableLiveData<>();
-    public Usuario usuarioLogeado;
-    public Usuario usuarioRegistrado;
-    public MutableLiveData<Usuario> autenticar = new MutableLiveData<>();
-    public LiveData<Usuario> validarUsuario = Transformations.switchMap(autenticar, new Function<Usuario, LiveData<Usuario>>() {
+    public MutableLiveData<EstadoDelRegistro> estadoDelRegistro = new MutableLiveData<>(EstadoDelRegistro.INICIO_DEL_REGISTRO);
+
+    private MutableLiveData<Autenticacion> autenticar = new MutableLiveData<>(new Autenticacion(Autenticacion.Estado.NO_AUTENTICADO));
+
+    private LiveData<Usuario> validarUsuario = Transformations.switchMap(autenticar, new Function<Autenticacion, LiveData<Usuario>>() {
         @Override
-        public LiveData<Usuario> apply(Usuario input) {
-            Log.e("ABCD", "validarUsuario " + input);
-            return appDao.autenticar(input.nombre, input.contrasenya);
+        public LiveData<Usuario> apply(Autenticacion autenticacion) {
+            if(autenticacion.usuario == null){
+                return new MutableLiveData<>(null);
+            } else {
+                return appDao.autenticar(autenticacion.usuario.nombre, autenticacion.usuario.contrasenya);
+            }
         }
     });
-    public LiveData<Boolean> usuarioValidado = Transformations.switchMap(validarUsuario, new Function<Usuario, LiveData<Boolean>>() {
+
+    public LiveData<Autenticacion> autenticacion = Transformations.switchMap(validarUsuario, new Function<Usuario, LiveData<Autenticacion>>() {
         @Override
-        public LiveData<Boolean> apply(Usuario input) {
-            Log.e("ABCD", "usuarioValidado " + input);
-            if(input != null){
-                estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.AUTENTICADO);
-            }else{
-                estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.NO_AUTENTICADO);
+        public LiveData<Autenticacion> apply(Usuario usuario) {
+            // TODO: MediatorLiveData?
+            if(autenticar.getValue().estado == Autenticacion.Estado.NO_AUTENTICADO){
+                return new MutableLiveData<>(new Autenticacion(Autenticacion.Estado.NO_AUTENTICADO));
+            } else if(usuario != null){
+                return new MutableLiveData<>(new Autenticacion(Autenticacion.Estado.AUTENTICADO, usuario));
             }
-            return null;
+            return new MutableLiveData<>(new Autenticacion(Autenticacion.Estado.AUTENTICACION_INVALIDA));
         }
     });
 
     public AutenticacionViewModel(@NonNull Application application) {
         super(application);
         appDao = AppDatabase.getInstance(application).dao();
-
-        estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.NO_AUTENTICADO);
-        estadoDelRegistro.setValue(EstadoDelRegistro.INICIO_DEL_REGISTRO);
     }
 
     public void crearCuentaEIniciarSesion(final String nombre, final String contrasenya, final String biografia) {
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                Usuario usuario = appDao.comprobarNombreDisponible(nombre);
-//                if(usuario == null){
-//                    AsyncTask.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Usuario newUsuario = new Usuario(nombre, contrasenya, biografia);
-//                            appDao.insertarUsuario(newUsuario);
-//                            usuarioRegistrado = newUsuario;
-//                            estadoDelRegistro.postValue(EstadoDelRegistro.REGISTRO_COMPLETADO);
-//                            iniciarSesion(nombre, contrasenya);
-//                        }
-//                    });
-//                } else {
-//                    estadoDelRegistro.postValue(EstadoDelRegistro.NOMBRE_NO_DISPONIBLE);
-//                }
-//            }
-//        });
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Usuario usuario = appDao.comprobarNombreDisponible(nombre);
+                if(usuario == null){
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            appDao.insertarUsuario(new Usuario(nombre, contrasenya, biografia));
+                            estadoDelRegistro.postValue(EstadoDelRegistro.REGISTRO_COMPLETADO);
+                            iniciarSesion(nombre, contrasenya);
+                        }
+                    });
+                } else {
+                    estadoDelRegistro.postValue(EstadoDelRegistro.NOMBRE_NO_DISPONIBLE);
+                }
+            }
+        });
     }
 
     public void iniciarSesion(final String nombre, final String contrasenya) {
-        autenticar.setValue(new Usuario(nombre, contrasenya, ""));
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                Usuario usuario = appDao.autenticar(nombre, contrasenya);
-//                if(usuario != null){
-//                    usuarioLogeado = usuario;
-//                    estadoDeLaAutenticacion.postValue(EstadoDeLaAutenticacion.AUTENTICADO);
-//                } else {
-//                    estadoDeLaAutenticacion.postValue(EstadoDeLaAutenticacion.AUTENTICACION_INVALIDA);
-//                }
-//            }
-//        });
+        autenticar.postValue(new Autenticacion(new Usuario(nombre, contrasenya)));
     }
 
     public void cerrarSesion() {
-        usuarioLogeado = null;
-        estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.NO_AUTENTICADO);
+        autenticar.setValue(new Autenticacion(Autenticacion.Estado.NO_AUTENTICADO));
     }
 }

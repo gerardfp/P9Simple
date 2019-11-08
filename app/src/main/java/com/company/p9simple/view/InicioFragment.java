@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +61,10 @@ public class InicioFragment extends Fragment {
             }
         });
 
-        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
+        autenticacionViewModel.autenticacion.observe(getViewLifecycleOwner(), new Observer<Autenticacion>() {
             @Override
-            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                switch (estadoDeLaAutenticacion){
+            public void onChanged(Autenticacion autenticacion) {
+                switch (autenticacion.estado){
                     case AUTENTICADO:
                         cerrarSesionButton.setVisibility(View.VISIBLE);
                         break;

@@ -12,8 +12,8 @@ import android.widget.Toast;
 import com.company.p9simple.NavigationBackStackLogger;
 import com.company.p9simple.R;
 import com.company.p9simple.viewmodel.AutenticacionViewModel;
-import com.company.p9simple.viewmodel.AutenticacionViewModel.EstadoDeLaAutenticacion;
-import com.company.p9simple.viewmodel.AutenticacionViewModel.EstadoDelRegistro;
+
+import static com.company.p9simple.viewmodel.AutenticacionViewModel.*;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,10 +72,10 @@ public class RegistroFragment extends Fragment {
             }
         });
 
-        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
+        autenticacionViewModel.autenticacion.observe(getViewLifecycleOwner(), new Observer<Autenticacion>() {
             @Override
-            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
-                switch (estadoDeLaAutenticacion){
+            public void onChanged(Autenticacion autenticacion) {
+                switch (autenticacion.estado){
                     case AUTENTICADO:
                         Navigation.findNavController(view).popBackStack();
                         break;
