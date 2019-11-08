@@ -78,7 +78,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
         });
     }
 
-    public void salir() {
+    public void cerrarSesion() {
         usuarioLogeado = null;
         estadoDeLaAutenticacion.setValue(EstadoDeLaAutenticacion.NO_AUTENTICADO);
     }
