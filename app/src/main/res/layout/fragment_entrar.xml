@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.LoginFragment">
+    tools:context=".view.EntrarFragment">
 
 
 
@@ -18,17 +18,17 @@
             android:textSize="24sp"/>
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"/>
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/contrasenya"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"/>
         <Button
-            android:id="@+id/login"
+            android:id="@+id/botonEntrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="LOGIN"/>

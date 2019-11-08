@@ -1,6 +1,6 @@
 package com.company.p9simple.db;
 
-import com.company.p9simple.model.User;
+import com.company.p9simple.model.Usuario;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -10,11 +10,11 @@ import androidx.room.Query;
 @Dao
 public abstract class AppDao {
     @Insert
-    public abstract void insertUser(User user);
+    public abstract void insertarUsuario(Usuario usuario);
 
-    @Query("SELECT * FROM User WHERE username = :username AND password = :password")
-    public abstract LiveData<User> authenticate(String username, String password);
+    @Query("SELECT * FROM Usuario WHERE nombre = :nombre AND contrasenya = :contrasenya")
+    public abstract LiveData<Usuario> autenticar(String nombre, String contrasenya);
 
-    @Query("SELECT * FROM User WHERE username = :username")
-    public abstract LiveData<User> getUser(String username);
+    @Query("SELECT * FROM Usuario WHERE nombre = :nombre")
+    public abstract LiveData<Usuario> comprobarNombreDiponible(String nombre);
 }

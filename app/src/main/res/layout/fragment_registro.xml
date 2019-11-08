@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.RegisterFragment">
+    tools:context=".view.RegistroFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,22 +16,22 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"/>
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/contrasenya"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"/>
         <EditText
-            android:id="@+id/bio"
+            android:id="@+id/biografia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Bio"/>
         <Button
-            android:id="@+id/register"
+            android:id="@+id/botonRegistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="REGISTRAR"/>
