@@ -9,9 +9,7 @@ import com.company.p9simple.model.Usuario;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 public class AutenticacionViewModel extends AndroidViewModel {
 
@@ -46,7 +44,7 @@ public class AutenticacionViewModel extends AndroidViewModel {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                Usuario usuario = appDao.comprobarNombreDiponible(nombre);
+                Usuario usuario = appDao.comprobarNombreDisponible(nombre);
                 if(usuario == null){
                     AsyncTask.execute(new Runnable() {
                         @Override
