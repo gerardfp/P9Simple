@@ -61,10 +61,10 @@ public class InicioFragment extends Fragment {
             }
         });
 
-        autenticacionViewModel.autenticacion.observe(getViewLifecycleOwner(), new Observer<Autenticacion>() {
+        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
             @Override
-            public void onChanged(Autenticacion autenticacion) {
-                switch (autenticacion.estado){
+            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                switch (estadoDeLaAutenticacion){
                     case AUTENTICADO:
                         cerrarSesionButton.setVisibility(View.VISIBLE);
                         break;

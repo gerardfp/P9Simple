@@ -46,12 +46,12 @@ public class PerfilFragment extends Fragment {
         biografiaEditText = view.findViewById(R.id.edittext_biografia);
 
 
-        autenticacionViewModel.autenticacion.observe(getViewLifecycleOwner(), new Observer<Autenticacion>() {
+        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
             @Override
-            public void onChanged(Autenticacion autenticacion) {
-                switch (autenticacion.estado) {
+            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                switch (estadoDeLaAutenticacion) {
                     case AUTENTICADO:
-                        mostrarPerfil(autenticacion.usuario);
+                        mostrarPerfil(autenticacionViewModel.usuarioLogeado);
                         break;
 
                     case NO_AUTENTICADO:

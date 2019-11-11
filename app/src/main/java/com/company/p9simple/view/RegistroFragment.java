@@ -72,10 +72,10 @@ public class RegistroFragment extends Fragment {
             }
         });
 
-        autenticacionViewModel.autenticacion.observe(getViewLifecycleOwner(), new Observer<Autenticacion>() {
+        autenticacionViewModel.estadoDeLaAutenticacion.observe(getViewLifecycleOwner(), new Observer<EstadoDeLaAutenticacion>() {
             @Override
-            public void onChanged(Autenticacion autenticacion) {
-                switch (autenticacion.estado){
+            public void onChanged(EstadoDeLaAutenticacion estadoDeLaAutenticacion) {
+                switch (estadoDeLaAutenticacion){
                     case AUTENTICADO:
                         Navigation.findNavController(view).popBackStack();
                         break;
